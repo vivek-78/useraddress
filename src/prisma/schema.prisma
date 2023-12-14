@@ -1,0 +1,24 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = "postgresql://akepoguvivek14:dKklCfvcSV58@ep-blue-sky-90381168.us-east-2.aws.neon.tech/users?sslmode=require"
+}
+
+model User {
+    userId  String   @id
+    address Address?
+}
+
+model Address {
+    addressId  String @id @default(cuid())
+    userId     String @unique
+    user       User   @relation(fields: [userId], references: [userId])
+    number     String
+    street     String
+    city       String
+    postalCode String
+    country    String
+}
