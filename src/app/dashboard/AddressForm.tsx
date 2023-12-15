@@ -1,20 +1,26 @@
-"use client"
 "use client";
 import axios from "axios";
-import {useForm} from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useUser } from "@clerk/nextjs";
-
+import { useEffect, useState } from "react";
 const dashBoardPage = () => {
-  const { register, handleSubmit, formState:{isSubmitting},getValues} = useForm<any>();
-  const user:any = useUser();
-  const onSubmit = async(data:any)=>{
-    try{
-      const userDetails = await axios.post("/api/register",{clerkUserId:user.user.id,...data});
+  const profile = useUser();
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+    getValues,
+  } = useForm<any>();
+  console.log(profile?.user);
+  const onSubmit = async () => {
+    console.log(profile.user);
+    try {
+      const userDetails = await axios.post("/api/register", {
+        clerkUserId: profile?.user?.id,
+      });
       console.log(userDetails);
-    }catch{
-
-    }
-  }
+    } catch {}
+  };
   return (
     <div className="flex justify-center align-center mt-5">
       <div className="relative flex flex-col text-gray-700 bg-transparent shadow-none rounded-xl bg-clip-border">
@@ -24,8 +30,11 @@ const dashBoardPage = () => {
         <p className="block mt-1 font-sans text-base antialiased font-normal leading-relaxed text-gray-700">
           Enter your Address details to register.
         </p>
-        <form onSubmit={handleSubmit(onSubmit)} className="max-w-screen-lg mt-8 mb-2 w-80 sm:w-96">
-        <div className="flex flex-col gap-6 mb-1">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="max-w-screen-lg mt-8 mb-2 w-80 sm:w-96"
+        >
+          <div className="flex flex-col gap-6 mb-1">
             <h6 className="block -mb-3 font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900">
               House Number
             </h6>
@@ -91,12 +100,6 @@ const dashBoardPage = () => {
           >
             sign up
           </button>
-          <p className="block mt-4 font-sans text-base antialiased font-normal leading-relaxed text-center text-gray-700">
-            Already have an account?
-            <a href="#" className="font-medium text-gray-900">
-              Sign In
-            </a>
-          </p>
         </form>
       </div>
     </div>
