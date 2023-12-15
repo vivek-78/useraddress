@@ -4,16 +4,17 @@ generator client {
 
 datasource db {
     provider = "postgresql"
-    url      = "postgresql://akepoguvivek14:FP0rYczKCwq7@ep-dark-rain-45291804.us-east-2.aws.neon.tech/useraddress?sslmode=require"
+    url      = "postgresql://akepoguvivek14:xYBM91SgFvaH@ep-bitter-band-50612088.ap-southeast-1.aws.neon.tech/useraddress?sslmode=require"
 }
 
 model User {
-    userId  String   @id @db.VarChar(225)
+    id      Int      @id @default(autoincrement())
+    userId  String   @unique
     address Address?
 }
 
 model Address {
-    addressId  String @id @default(cuid())
+    addressId  String @id @unique @default(cuid())
     userId     String @unique
     user       User   @relation(fields: [userId], references: [userId])
     number     String

@@ -1,23 +1,21 @@
-"use client";
 import { UserButton } from "@clerk/nextjs";
-import { useUser } from "@clerk/nextjs";
+import {  currentUser } from "@clerk/nextjs";
 import AddressDetails from "./AddressDetails";
-import { useEffect, useState } from "react";
 import { PrismaClient } from "@prisma/client";
-import AddressForm from "./AddressForm";
-export default function Home() {
+import { redirect } from 'next/navigation'
+import { truncate } from "fs/promises";
+export default async function Home() {
+  // const[user,setUser] = useState();
+  const profile = await currentUser();
   const prisma = new PrismaClient();
-  const [user, setUser] = useState<any>("");
-  const getUser = async () => {
-    const clerkUser:any= await useUser();
-    const userDetails:any = await prisma.user.findUnique({ where: { userId : clerkUser?.id} });
-    setUser(userDetails)
-};
-  useEffect(() => { getUser() }, []);
+  const userAdress = await prisma.user.findUnique({where:{userId:profile?.id},select:{address:true}});
+  if(!userAdress){
+    redirect("/register");
+  }
   return (
     <div className="h-screen">
       <UserButton afterSignOutUrl="/" />
-      {user.address != null ? <AddressForm /> : <AddressDetails />}
+        <AddressDetails user={userAdress}/>
     </div>
   );
 }

@@ -1,8 +1,9 @@
 -- CreateTable
 CREATE TABLE "User" (
-    "userId" VARCHAR(225) NOT NULL,
+    "id" SERIAL NOT NULL,
+    "userId" TEXT NOT NULL,
 
-    CONSTRAINT "User_pkey" PRIMARY KEY ("userId")
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -17,6 +18,12 @@ CREATE TABLE "Address" (
 
     CONSTRAINT "Address_pkey" PRIMARY KEY ("addressId")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_userId_key" ON "User"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Address_addressId_key" ON "Address"("addressId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Address_userId_key" ON "Address"("userId");
